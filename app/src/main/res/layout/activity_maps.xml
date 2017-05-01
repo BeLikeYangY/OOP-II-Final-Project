@@ -5,13 +5,15 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/TFaddress"
-        android:layout_width="wrap_content"
+
+
+    <fragment
+        android:id="@+id/place_autocomplete_fragment"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search the place"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        />
+
 
 
     <Button
@@ -30,9 +32,12 @@
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/map"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        map:uiZoomControls="true"
+        />
 
 
 </LinearLayout>

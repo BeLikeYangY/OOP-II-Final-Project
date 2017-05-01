@@ -3,30 +3,30 @@ package com.example.android.finalproject;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-
+    private static final String TAG = "google map";
     private GoogleMap mMap;
 
     double latitude;
@@ -34,6 +34,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     PlaceInfo placeVisited;
     String placeSearched;
     ArrayList<PlaceInfo> placeList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        searchPlaceVisited();
+
     }
 
+
+    public void searchPlaceVisited(){
+        //autocomplete in searchbar fragment
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName());
+                placeSearched =(String)place.getName();
+                latitude = place.getLatLng().latitude;
+                longitude = place.getLatLng().longitude;
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -62,28 +89,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         mMap.setMyLocationEnabled(true);
+        UiSettings mUiSettings = mMap.getUiSettings();
+        mUiSettings.setZoomControlsEnabled(true);
     }
 
-    public void onSearch(View view) throws IOException {
-        EditText location_tf = (EditText) findViewById(R.id.TFaddress);
-        placeSearched = location_tf.getText().toString();
-        List<Address> addressList = null;
-        if (placeSearched != null || placeSearched.equals("")) {
-            Geocoder geocoder = new Geocoder(this);
-            try {
-                addressList = geocoder.getFromLocationName(placeSearched, 1);
+//    public void onAddCity(View view) {
+//        placeVisited = new PlaceInfo(longitude, latitude, placeSearched);
+//        placeList.add(placeVisited);
+//        Toast toast = Toast.makeText(this, placeSearched, Toast.LENGTH_LONG);
+//        toast.show();
+//    }
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Address address = addressList.get(0);
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLatitude());
 
-            mMap.addMarker(new MarkerOptions().position(latLng).title(placeSearched));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-        }
+
+    public void onSearch(View view){
+        LatLng latLng = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(latLng).title(placeSearched));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+        //auto zoom in
+        float zoomLevel = (float) 16.0; //This goes up to 21
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+
     }
+
 
     public void getCurrentLocation() {
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -95,16 +125,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         longitude = location.getLongitude();
         latitude = location.getLatitude();
 
-        EditText location_tf = (EditText) findViewById(R.id.TFaddress);
-        location_tf.setText("");
-        placeSearched = "";
+//        EditText location_tf = (EditText) findViewById(R.id.TFaddress);
+//        location_tf.setText("");
+//        placeSearched = "";
     }
 
-    public void onAddCity(View view) {
-        placeVisited = new PlaceInfo(longitude, latitude, placeSearched);
-        placeList.add(placeVisited);
-        Toast toast = Toast.makeText(this, placeSearched, Toast.LENGTH_LONG);
-        toast.show();
-    }
+
+
+    //autocomplete
+
 
 }
