@@ -13,7 +13,6 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="main"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
@@ -26,5 +25,11 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="my Map"
+        android:onClick="showMyMap"/>
 
 </android.support.constraint.ConstraintLayout>

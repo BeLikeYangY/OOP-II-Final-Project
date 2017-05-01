@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -20,7 +21,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class GmapFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap map;
 
+    private GoogleApiClient mGoogleApiClient;
+
     public GmapFragment(){
+
 
     }
     @Override
@@ -41,6 +45,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         return v;
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view,savedInstanceState);
@@ -57,4 +62,6 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         map.addMarker(option);
         map.moveCamera(CameraUpdateFactory.newLatLng(nyc));
     }
+
+
 }

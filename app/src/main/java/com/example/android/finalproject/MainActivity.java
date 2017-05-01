@@ -1,10 +1,7 @@
 package com.example.android.finalproject;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,9 +33,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        GmapFragment goolemapFragment = new GmapFragment();
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.mainLayout,goolemapFragment).commit();
+//        GmapFragment goolemapFragment = new GmapFragment();
+//        FragmentManager manager = getSupportFragmentManager();
+//        manager.beginTransaction().replace(R.id.mainLayout,goolemapFragment).commit();
 
     }
 
@@ -90,14 +88,20 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_Gmap) {
-            GmapFragment goolemapFragment = new GmapFragment();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.mainLayout,goolemapFragment).commit();
+//            GmapFragment goolemapFragment = new GmapFragment();
+//            FragmentManager manager = getSupportFragmentManager();
+//            manager.beginTransaction().replace(R.id.mainLayout,goolemapFragment).commit();
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    public void showMyMap(View view) {
+        Intent map = new Intent(this, MapsActivity.class);
+        startActivity(map);
     }
 }
