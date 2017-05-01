@@ -62,4 +62,6 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback {
         map.addMarker(option);
         map.moveCamera(CameraUpdateFactory.newLatLng(nyc));
     }
+
+
 }
